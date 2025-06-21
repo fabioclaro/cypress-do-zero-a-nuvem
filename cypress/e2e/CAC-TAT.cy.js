@@ -47,7 +47,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
       .should('have.value', '')
   })
 
-  it.only('exibir mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
+  it('exibir mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
     cy.get('#firstName').type('Binho')
     cy.get('#lastName').type('Claro')
     cy.get('#email').type('binho@teste.com,br')
@@ -118,10 +118,25 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     })
   })
 
-  
   it('Marcar ambos checkboxes, depois desmarca o último"', () => {
     cy.get('input[type=checkbox]').check().should('be.checked').last().uncheck().should('not.be.checked')
-    
   })
+
+  it('verificar que a política de privacidade abre em outra aba sem a necessidade de um clique', () => {
+    cy.contains('a', 'Política de Privacidade')
+    .should('have.attr', 'href', 'privacy.html')
+    .and('have.attr', 'target', '_blank' )
+  })
+
+it('Acessar a página da política de privacidade removendo o target e então clicando no link', () => {
+  cy.contains('a', 'Política de Privacidade')
+  .invoke('removeAttr', 'target')
+  .click()
+  
+  cy.contains('h1', 'CAC TAT - Política de Privacidade')
+  .should('be.visible')
+})
+
+
 
 })
