@@ -20,6 +20,8 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   })
 
   it('Preenchendo com textos maiores de forma instantânea', () => {
+    cy.clock()
+
     const longText = Cypress._.repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 10) //lowdash
 
     cy.get('#firstName').type('Binho')
@@ -29,9 +31,15 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.contains('button', 'Enviar').click()
 
     cy.get('.success').should('be.visible', 'Mensagem enviada com sucesso.')
+
+    cy.tick(3000)
+
+    cy.get('.success').should('not.be.visible')
   })
 
   it('Exibir mensagem de erro ao submeter o formulário com um email com formatação inválida', () => {
+    cy.clock()
+
     cy.get('#firstName').type('Binho')
     cy.get('#lastName').type('Claro')
     cy.get('#email').type('binho@teste.com,br')
@@ -39,6 +47,10 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.contains('button', 'Enviar').click()
 
     cy.get('.error').should('be.visible')
+
+    cy.tick(3000)
+
+    cy.get('.error').should('not.be.visible')
   })
 
   it('o campo telefone não deve aceitar valores não-numéricos', () => {
@@ -48,6 +60,8 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   })
 
   it('exibir mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
+    cy.clock()
+    
     cy.get('#firstName').type('Binho')
     cy.get('#lastName').type('Claro')
     cy.get('#email').type('binho@teste.com,br')
@@ -56,6 +70,10 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.contains('button', 'Enviar').click()
 
     cy.get('.error').should('be.visible')
+
+    cy.tick(3000)
+
+    cy.get('.error').should('not.be.visible')
   })
 
   it('Preenche e limpa os campos nome, sobrenome, email e telefone', () => {
@@ -66,9 +84,15 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   })
 
   it('Exibir mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', () => {
+    cy.clock()
+
     cy.contains('button', 'Enviar').click()
 
     cy.get('.error').should('be.visible')
+
+    cy.tick(3000)
+
+    cy.get('.error').should('not.be.visible')
   })
 
   it('Enviar o formuário com sucesso usando um comando customizado', () => {
@@ -137,6 +161,38 @@ it('Acessar a página da política de privacidade removendo o target e então cl
   .should('be.visible')
 })
 
+  it('Validar se a mensagem de sucesso some após 3 segundos', () => {
+    cy.clock()
 
+    const longText = Cypress._.repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 10) //lowdash
 
+    cy.get('#firstName').type('Binho')
+    cy.get('#lastName').type('Claro')
+    cy.get('#email').type('binho@teste.com.br')
+    cy.get('#open-text-area').type(longText, { delay: 0 })
+    cy.contains('button', 'Enviar').click()
+
+    cy.get('.success').should('be.visible')
+
+    cy.tick(3000)
+
+    cy.get('.success').should('not.be.visible')
+  })
+
+ it('Validar se a mensagem de erro some após 3 segundos', () => {
+    cy.clock()
+
+    cy.get('#firstName').type('Binho')
+    cy.get('#lastName').type('Claro')
+    cy.get('#email').type('binho@teste.com,br')
+    cy.get('#open-text-area').type('teste')
+    cy.get('#phone-checkbox').check()
+    cy.contains('button', 'Enviar').click()
+
+    cy.get('.error').should('be.visible')
+
+    cy.tick(3000)
+
+    cy.get('.error').should('not.be.visible')
+  })
 })
