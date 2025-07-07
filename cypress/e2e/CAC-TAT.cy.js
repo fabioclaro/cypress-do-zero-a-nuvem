@@ -164,7 +164,7 @@ it('Acessar a página da política de privacidade removendo o target e então cl
   it('Validar se a mensagem de sucesso some após 3 segundos', () => {
     cy.clock()
 
-    const longText = Cypress._.repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 10) //lowdash
+    const longText = Cypress._.repeat('ABCDEFGHIJKLMNOPQRSTUVWYZ', 10) //lowdash
 
     cy.get('#firstName').type('Binho')
     cy.get('#lastName').type('Claro')
