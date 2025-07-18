@@ -61,7 +61,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
 
   it('exibir mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
     cy.clock()
-    
+
     cy.get('#firstName').type('Binho')
     cy.get('#lastName').type('Claro')
     cy.get('#email').type('binho@teste.com,br')
@@ -148,18 +148,18 @@ describe('Central de Atendimento ao Cliente TAT', () => {
 
   it('verificar que a política de privacidade abre em outra aba sem a necessidade de um clique', () => {
     cy.contains('a', 'Política de Privacidade')
-    .should('have.attr', 'href', 'privacy.html')
-    .and('have.attr', 'target', '_blank' )
+      .should('have.attr', 'href', 'privacy.html')
+      .and('have.attr', 'target', '_blank')
   })
 
-it('Acessar a página da política de privacidade removendo o target e então clicando no link', () => {
-  cy.contains('a', 'Política de Privacidade')
-  .invoke('removeAttr', 'target')
-  .click()
-  
-  cy.contains('h1', 'CAC TAT - Política de Privacidade')
-  .should('be.visible')
-})
+  it('Acessar a página da política de privacidade removendo o target e então clicando no link', () => {
+    cy.contains('a', 'Política de Privacidade')
+      .invoke('removeAttr', 'target')
+      .click()
+
+    cy.contains('h1', 'CAC TAT - Política de Privacidade')
+      .should('be.visible')
+  })
 
   it('Validar se a mensagem de sucesso some após 3 segundos', () => {
     cy.clock()
@@ -179,7 +179,7 @@ it('Acessar a página da política de privacidade removendo o target e então cl
     cy.get('.success').should('not.be.visible')
   })
 
- it('Validar se a mensagem de erro some após 3 segundos', () => {
+  it('Validar se a mensagem de erro some após 3 segundos', () => {
     cy.clock()
 
     cy.get('#firstName').type('Binho')
@@ -195,40 +195,47 @@ it('Acessar a página da política de privacidade removendo o target e então cl
 
     cy.get('.error').should('not.be.visible')
   })
-it('Exibir e ocultar as mensagens de sucesso e erro usando .invoke()', () => {
-  cy.get('.success')
-    .should('not.be.visible')
-    .invoke('show')
-    .should('be.visible')
-    .and('contain', 'Mensagem enviada com sucesso.')
-    .invoke('hide')
-    .should('not.be.visible')
-  cy.get('.error')
-    .should('not.be.visible')
-    .invoke('show')
-    .should('be.visible')
-    .and('contain', 'Valide os campos obrigatórios!')
-    .invoke('hide')
-    .should('not.be.visible')
-})
+  it('Exibir e ocultar as mensagens de sucesso e erro usando .invoke()', () => {
+    cy.get('.success')
+      .should('not.be.visible')
+      .invoke('show')
+      .should('be.visible')
+      .and('contain', 'Mensagem enviada com sucesso.')
+      .invoke('hide')
+      .should('not.be.visible')
+    cy.get('.error')
+      .should('not.be.visible')
+      .invoke('show')
+      .should('be.visible')
+      .and('contain', 'Valide os campos obrigatórios!')
+      .invoke('hide')
+      .should('not.be.visible')
+  })
 
-it('preenche o campo da área de texto usando o comando invoke simulando um ctrl+v', () => {
+  it('Preencher o campo da área de texto usando o comando invoke simulando um ctrl+v', () => {
     cy.get('#open-text-area')
-    .invoke('val', 'Um texto qualquer')
-    .should('have.value', 'Um texto qualquer')
+      .invoke('val', 'Um texto qualquer')
+      .should('have.value', 'Um texto qualquer')
+  })
+  it('Fazer uma requisição HTTP', () => {
+    cy.request('https://cac-tat-v3.s3.eu-central-1.amazonaws.com/index.html')
+      .as('getRequest')
+      .its('status')
+      .should('be.equal', 200)
+    cy.get('@getRequest')
+      .its('statusText')
+      .should('be.equal', 'OK')
+    cy.get('@getRequest')
+      .its('body')
+      .should('include', 'CAC TAT')
+  })
+  it('Desafio final encontre o gato escondido', () => {
+    cy.get('#cat')
+      .invoke('show')
+      .should('be.visible')
+    cy.get('#title')
+      .invoke('text', 'CAT TAT')
+    cy.get('#subtitle')
+      .invoke('text', 'MIau miau miau miau miau miau')
+  })
 })
-it('faz uma requisição HTTP', () => {
-  cy.request('https://cac-tat-v3.s3.eu-central-1.amazonaws.com/index.html')
-  .as('getRequest')
-  .its('status')
-  .should('be.equal', 200 )
-  cy.get('@getRequest')
-  .its('statusText')
-  .should('be.equal', 'OK')
-  cy.get('@getRequest')
-  .its('body')
-  .should('include', 'CAC TAT')
-})
-
-})
- 
