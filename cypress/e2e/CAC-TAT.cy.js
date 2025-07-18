@@ -211,4 +211,11 @@ it('Exibir e ocultar as mensagens de sucesso e erro usando .invoke()', () => {
     .invoke('hide')
     .should('not.be.visible')
 })
+
+it('preenche o campo da área de texto usando o comando invoke simulando um ctrl+v', () => {
+    cy.get('#open-text-area')
+    .invoke('val', 'Um texto qualquer')
+    .should('have.value', 'Um texto qualquer')
 })
+})
+ 
